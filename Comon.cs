@@ -173,7 +173,7 @@ namespace MiniMap
             string userAgent = request.Headers["User-Agent"].ToString();
 
             filtersContext.Arguments[filtersContext.Arguments.Count - 1] = Comon.UnitCheck(userAgent);
-            Console.WriteLine($"mediaCode={filtersContext.Arguments["mediaCode"]}");
+            Console.WriteLine($"mediaCode={filtersContext.GetArgument<int>(filtersContext.Arguments.Count-1)}");
             return await next(filtersContext);
         }
     }
