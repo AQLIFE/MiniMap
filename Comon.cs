@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace MiniMap
 {
@@ -60,26 +59,26 @@ namespace MiniMap
     /// </summary>
     public class ResultInfo
     {
-        public string message { get; set; }
+        public string Message { get; set; }
 
-        public object? data { get; set; }
+        public object? Data { get; set; }
 
         public ResultInfo(bool bl, object data)
         {
-            this.message = bl ? "success" : "fail";
-            this.data = data;
+            this.Message = bl ? "success" : "fail";
+            this.Data = data;
         }
 
         public ResultInfo(string message, object? data)
         {
-            this.message = message;
-            this.data = data;
+            this.Message = message;
+            this.Data = data;
         }
 
         public ResultInfo(string message)
         {
-            this.message = message;
-            this.data = null;
+            this.Message = message;
+            this.Data = null;
         }
     }
 
@@ -117,8 +116,11 @@ namespace MiniMap
             HttpRequest request = context.HttpContext.Request;
             ObjectResult result = context.Result as ObjectResult;
 
-            if (context.Canceled) {// 是否被其他 Filters 短路
-            } else if (context.Exception != null) {
+            if (context.Canceled)
+            {// 是否被其他 Filters 短路
+            }
+            else if (context.Exception != null)
+            {
                 ResultInfo info = new(false, "系统不能响应此类操作，请联系系统管理员." + DateTime.Now);
                 Console.WriteLine($"Error:[{request.Path}=>{context.Exception.Message}]{DateTime.Now}");
                 context.Result = new ObjectResult(info);
@@ -139,11 +141,11 @@ namespace MiniMap
         public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext filtersContext, EndpointFilterDelegate next)
         {
             var result = await next(filtersContext);
-            
+
             if (result != null && result is List<TreeHolesInfo> || result is TreeHolesInfo || result is int)
             {
                 var obj = new ResultInfo(result != null, result);
-                Console.WriteLine($"Response=>[{obj.message}]");
+                Console.WriteLine($"Response=>[{obj.Message}]");
                 return obj;
             }
             else return new ResultInfo("后台服务初始化未完成，请联系管理员处理");
@@ -173,17 +175,18 @@ namespace MiniMap
             string userAgent = request.Headers["User-Agent"].ToString();
 
             filtersContext.Arguments[filtersContext.Arguments.Count - 1] = Comon.UnitCheck(userAgent);
-            Console.WriteLine($"mediaCode={filtersContext.GetArgument<int>(filtersContext.Arguments.Count-1)}");
+            Console.WriteLine($"mediaCode={filtersContext.GetArgument<int>(filtersContext.Arguments.Count - 1)}");
             return await next(filtersContext);
         }
     }
 
     public class Comon
     {
-        public static int Rand(int num) {
+        public static int Rand(int num)
+        {
             Random rd = new();
             int s = rd.Next(num);
-            return s + 4 <= num ? s: 0;
+            return s + 4 <= num ? s : 0;
         }
 
         public static int UnitCheck(string mediaUa)
@@ -204,7 +207,7 @@ namespace MiniMap
                 _ => MediaCode.Other,
             };
         }
-    } 
+    }
 
     //public class ErrorEndpointFilter:IEndpointFilter
     //{
@@ -213,4 +216,4 @@ namespace MiniMap
     //        filtersContext.Http
     //    }
     //}
- }
+}

@@ -1,12 +1,10 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using MiniMap;
 
 var builder = WebApplication.CreateBuilder(args);
 var arg = builder.Configuration["ConnectionStrings:MysqlConnection"];
 
-if(arg !=null)builder.Services.AddDbContext<TreeDbContext>(option => option.UseMySQL(arg));
+if (arg != null) builder.Services.AddDbContext<TreeDbContext>(option => option.UseMySQL(arg));
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
