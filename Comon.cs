@@ -205,4 +205,12 @@ namespace MiniMap
             };
         }
     } 
-}
+
+    //public class ErrorEndpointFilter:IEndpointFilter
+    //{
+    //    public ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext filtersContext, EndpointFilterDelegate next)
+    //    {
+    //        filtersContext.Http
+    //    }
+    //}
+ }
